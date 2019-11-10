@@ -7,6 +7,7 @@ static const unsigned int baralpha        = 0xb3;
 static const unsigned int borderalpha     = 0xb3;
 
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const unsigned int gappx     = 13;
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
@@ -16,7 +17,7 @@ static const char col_gray1[]       = "#282828";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#928374";
 static const char col_gray4[]       = "#fbf1c7";
-static const char col_orange[]      = "#F38A1D";
+static const char col_orange[]      = "#F08E33";
 static const char col_blue[]        = "#458588";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
@@ -41,7 +42,7 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
-	{ "tmux",     NULL,       NULL,       2 << 9,       0,           -1 },
+	// { "tmux",     NULL,       NULL,       2 << 9,       0,           -1 },
 };
 
 /* layout(s) */
@@ -121,6 +122,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
+	{ MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
