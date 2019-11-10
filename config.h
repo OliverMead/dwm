@@ -3,8 +3,8 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static unsigned int baralpha        = 0xb3;
-static unsigned int borderalpha     = 0xb3;
+static const unsigned int baralpha        = 0xb3;
+static const unsigned int borderalpha     = 0xb3;
 
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -16,13 +16,18 @@ static const char col_gray1[]       = "#282828";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#928374";
 static const char col_gray4[]       = "#fbf1c7";
-static const char col_orange[]      = "#FC7B04";
+static const char col_orange[]      = "#F38A1D";
 static const char col_blue[]        = "#458588";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray4, col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_orange,  col_orange  },
     [SchemeHid]  = { col_orange,  col_gray1, col_orange  },
+};
+static const unsigned int alphas[][3]      = {
+	/*               fg      bg        border     */
+	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
+	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 };
 
 /* tagging */
@@ -63,7 +68,11 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_orange, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { 
+    "dmenu_run", "-m", dmenumon, "-fn", dmenufont, 
+    "-nb", col_gray1, "-nf", col_gray3, "-sb", 
+    col_orange, "-sf", col_gray4, NULL 
+};
 static const char *termcmd[]  = { 
     "alacritty", "-e","tmux", "new-session", "-A", "-n", "\"editor\"", "-s", "\"main\"", "nvim", "--listen",
     "/tmp/nvimsocket", "+terminal", "+start", NULL 
