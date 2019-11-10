@@ -143,8 +143,8 @@ static Key keys[] = {
     { 0,                            XF86XK_AudioPlay, spawn,   {.v = pausecmd } },
     { 0,                            XF86XK_AudioPrev, spawn,   {.v = pprevcmd } },
     { 0,                            XF86XK_AudioNext, spawn,   {.v = pnextcmd } },
-    { 0,                            XF86XK_KbdBrightnessUp, spawn,   {.v = bcklightupcmd } },
-    { 0,                            XF86XK_KbdBrightnessDown, spawn,   {.v = bcklightdncmd } },
+    { 0,                            XF86XK_MonBrightnessUp, spawn,   {.v = bcklightupcmd } },
+    { 0,                            XF86XK_MonBrightnessDown, spawn,   {.v = bcklightdncmd } },
 };
 
 /* button definitions */
