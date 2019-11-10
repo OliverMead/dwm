@@ -10,8 +10,8 @@ static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Source Code Pro:size=15" };
-static const char dmenufont[]       = "Source Code Pro:size=15";
+static const char *fonts[]          = { "Source Code Pro:size=20" };
+static const char dmenufont[]       = "Source Code Pro:size=20";
 static const char col_gray1[]       = "#282828";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#928374";
@@ -21,7 +21,7 @@ static const char col_blue[]        = "#458588";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray4, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_orange,  col_orange  },
+	[SchemeSel]  = { col_gray1, col_orange,  col_orange  },
     [SchemeHid]  = { col_orange,  col_gray1, col_orange  },
 };
 static const unsigned int alphas[][3]      = {
@@ -31,7 +31,7 @@ static const unsigned int alphas[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -40,7 +40,8 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "tmux",     NULL,       NULL,       2 << 9,       0,           -1 },
 };
 
 /* layout(s) */
@@ -74,7 +75,7 @@ static const char *dmenucmd[] = {
     col_orange, "-sf", col_gray4, NULL 
 };
 static const char *termcmd[]  = { 
-    "alacritty", "-e","tmux", "new-session", "-A", "-n", "\"editor\"", "-s", "\"main\"", "nvim", "--listen",
+    "alacritty", "-e","tmux", "new-session", "-A", "-n", "editor", "-s", "main", "nvim", "--listen",
     "/tmp/nvimsocket", "+terminal", "+start", NULL 
 };
 static const char *basictermcmd[] = { "alacritty", NULL };
@@ -91,7 +92,7 @@ static const char *bcklightdncmd[] = { "brightnessctl", "s", "10%-", NULL };
 static const char *pausecmd[] = { "playerctl", "play-pause", NULL };
 static const char *pnextcmd[] = { "playerctl", "next", NULL };
 static const char *pprevcmd[] = { "playerctl", "next", NULL };
-static const char mousename[] = "SynPS/2\ Synaptics\ TouchPad";
+static const char mousename[] = "SynPS/2 Synaptics TouchPad";
 static const char *nomousecmd[] = { "xinput", "disable", mousename, "&&", "killall", "unclutter", NULL };
 static const char *enmousecmd[] = { "xinput", "enable", mousename, "&&", "unclutter", "-idle", "0", NULL };
 
