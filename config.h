@@ -42,7 +42,15 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
-	// { "tmux",     NULL,       NULL,       2 << 9,       0,           -1 },
+    { "Spotify",  NULL,       NULL,       1 << 2,       0,           -1 },
+    { "htop",     NULL,       NULL,       1 << 6,       0,           -1 },
+    { "blender",  NULL,       NULL,       1 << 3,       0,           -1 },
+    { "Telegram", NULL,       NULL,       1 << 7,       0,           -1 },
+    { "Steam",    NULL,       NULL,       1 << 2,       0,           -1 },
+    { "Zathura",  NULL,       NULL,       1 << 1,       0,           -1 },
+	{ "Alacritty",NULL,       "tmux-main",1,            0,           -1 },
+	{ "Alacritty",NULL,       "htop",     1 << 6,       0,           -1 },
+	{ "Alacritty",NULL,       "calcurse", 1 << 5,       0,           -1 },
 };
 
 /* layout(s) */
@@ -76,26 +84,28 @@ static const char *dmenucmd[] = {
     col_orange, "-sf", col_gray4, NULL 
 };
 static const char *termcmd[]  = { 
-    "alacritty", "-e","tmux", "new-session", "-A", "-n", "editor", "-s", "main", "nvim", "--listen",
+    "alacritty", "--title", "tmux-main", "-e","tmux", "new-session", "-A", "-n", "editor", "-s", "main", "nvim", "--listen",
     "/tmp/nvimsocket", "+terminal", "+start", NULL 
 };
 static const char *basictermcmd[] = { "alacritty", NULL };
 static const char *browsercmd[] = { "env", "GDK_DPI_SCALE=1.5", "firefox", NULL };
 static const char *comptoncmd[] = { "killall compton && compton", NULL };
-static const char *rangercmd[] = { "alacritty -e ranger &", NULL };
-static const char *htopcmd[] = { "alacritty -e htop &", NULL };
+static const char *rangercmd[] = { "alacritty", "--title", "ranger", "-e", "ranger", NULL };
+static const char *calcmd[] = { "alacritty", "--title", "calcurse", "-e", "calcurse", NULL };
+static const char *htopcmd[] = { "alacritty", "--title", "htop", "-e", "htop", NULL };
 static const char *snipcmd[] = { "xfce4-screenshooter -r", NULL };
-static const char *mutecmd[] = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL };
-static const char *volupcmd[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+2%", NULL };
-static const char *voldncmd[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-2%", NULL };
+static const char *mutecmd[] = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", "&&", "pkill", "-RTMIN+10", "dwmblocks" , NULL };
+static const char *volupcmd[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+2%", "&&", "pkill", "-RTMIN+10", "dwmblocks" , NULL };
+static const char *voldncmd[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-2%", "&&", "pkill", "-RTMIN+10", "dwmblocks" , NULL };
 static const char *bcklightupcmd[] = { "brightnessctl", "s", "10%+", NULL };
 static const char *bcklightdncmd[] = { "brightnessctl", "s", "10%-", NULL };
-static const char *pausecmd[] = { "playerctl", "play-pause", NULL };
-static const char *pnextcmd[] = { "playerctl", "next", NULL };
-static const char *pprevcmd[] = { "playerctl", "next", NULL };
-static const char mousename[] = "SynPS/2 Synaptics TouchPad";
+static const char *pausecmd[] = { "playerctl", "play-pause", "&&", "pkill", "-RTMIN+11", "dwmblocks" , NULL };
+static const char *pnextcmd[] = { "playerctl", "next", "&&", "pkill", "-RTMIN+11", "dwmblocks" , NULL };
+static const char *pprevcmd[] = { "playerctl", "next", "&&", "pkill", "-RTMIN+11", "dwmblocks" , NULL };
+static const char mousename[] = "\"SynPS/2 Synaptics TouchPad\"";
 static const char *nomousecmd[] = { "xinput", "disable", mousename, "&&", "killall", "unclutter", NULL };
 static const char *enmousecmd[] = { "xinput", "enable", mousename, "&&", "unclutter", "-idle", "0", NULL };
+static const char *lockercmd[] = { "i3lock-fancy-rapid", "50", "2", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -136,12 +146,14 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_e,      quit,           {0} },
     { MODKEY|Mod1Mask,              XK_Return, spawn,          {.v = basictermcmd } },
-    { MODKEY,                       XK_f,       spawn,         {.v = rangercmd } },
+    { MODKEY|ControlMask,           XK_f,       spawn,         {.v = rangercmd } },
     { MODKEY|ShiftMask,             XK_f,        spawn,        {.v = browsercmd } },
     { MODKEY,                       XK_Escape, spawn,          {.v = htopcmd } },
+    { MODKEY,                       XK_c,      spawn,          {.v = calcmd } },
     { MODKEY|ShiftMask,             XK_Print,  spawn,          {.v = snipcmd } },
     { MODKEY|ShiftMask,             XK_m,  spawn,              {.v = nomousecmd } },
-    { MODKEY,                       XK_m,  spawn,              {.v = enmousecmd } },
+    { MODKEY|ControlMask,           XK_m,  spawn,              {.v = enmousecmd } },
+    { MODKEY,                       XK_Delete, spawn,           {.v = lockercmd } },
     { 0,                            XF86XK_AudioMute, spawn,   {.v = mutecmd } },
     { 0,                            XF86XK_AudioLowerVolume, spawn,   {.v = voldncmd } },
     { 0,                            XF86XK_AudioRaiseVolume, spawn,   {.v = volupcmd } },
