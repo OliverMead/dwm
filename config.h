@@ -15,7 +15,8 @@ static const char col_orange[]      = "#F08E33";
 static const char *colors[][3]      = {
     /*               fg         bg         border   */
     [SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-    [SchemeSel]  = { col_gray4, col_orange,  col_orange  },
+    /* [SchemeSel]  = { col_gray4, col_orange,  col_orange  }, */
+    [SchemeSel]  = { col_gray1, col_gray4,  col_gray4  },
     [SchemeHid]  = { col_orange,  col_gray1, col_orange  },
 };
 
@@ -29,8 +30,13 @@ static const Rule rules[] = {
      *	WM_NAME(STRING) = title
      */
     /* class      instance    title       tags mask     isfloating   monitor */
-    { "Gimp",     NULL,       NULL,       0,            1,           -1 },
-    { "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+    { "gimp",     NULL,       NULL,       0,            1,           -1 },
+    { "firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+    { "discord",  NULL,       NULL,       1 << 7,       0,           -1 },
+    { "mpv",      NULL,       NULL,    ~(1 | (1 << 7)), 0,           -1 },
+    { "St",       NULL,       NULL,       (1 << 8) - 1, 0,           -1 },
+    { "Emacs",    NULL,       NULL,       1 | (1 << 8), 0,           -1 },
+    { "Spotify",  NULL,       NULL,       1 << 2,       0,           -1 },
 };
 
 /* layout(s) */
@@ -62,15 +68,19 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_orange, "-sf", col_gray4, NULL };
-static const char *roficmd[] = { "rofi", "-show", "run", NULL };
+static const char *rofidesk[] = { "rofi", "-show", "drun", NULL };
+static const char *roficmd[]  = { "rofi", "-show", "run",  NULL };
+static const char *rofiwin[] = { "rofi", "-show", "window", NULL };
 static const char *termcmd[]  = { "st", "-e", "tmux", NULL };
 /* static const char *lockcmd[] = { "xsecurelock", NULL }; */
 static const char *lockcmd[] = { "loginctl", "lock-session", NULL };
 
 static Key keys[] = {
     /* modifier                     key        function        argument */
-    { 0,                            XF86XK_ScreenSaver, spawn,     {.v = lockcmd } },
-    { MODKEY,                       XK_p,      spawn,          {.v = roficmd } },
+    { 0,                            XF86XK_ScreenSaver, spawn, {.v = lockcmd } },
+    { MODKEY,                       XK_p,      spawn,          {.v = rofidesk } },
+    { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = roficmd } },
+    { MODKEY,                       XK_w,      spawn,          {.v = rofiwin } },
     { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
     { MODKEY,                       XK_b,      togglebar,      {0} },
     { MODKEY|ShiftMask,             XK_j,      rotatestack,    {.i = +1 } },
