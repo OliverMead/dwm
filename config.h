@@ -33,9 +33,10 @@ static const Rule rules[] = {
     { "gimp",     NULL,       NULL,       0,            1,           -1 },
     { "firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
     { "discord",  NULL,       NULL,       1 << 7,       0,           -1 },
-    { "mpv",      NULL,       NULL,    ~(1 | (1 << 7)), 0,           -1 },
-    { "St",       NULL,       NULL,       (1 << 8) - 1, 0,           -1 },
-    { "Emacs",    NULL,       NULL,       1 | (1 << 8), 0,           -1 },
+    { "mpv",      NULL,       NULL,    ~( 1 | ( 1 << 7 ) ), 0,           -1 },
+    /* { "St",       NULL,       NULL,       (1 << 8) - 1, 0,           -1 }, */
+    { "Steam",    NULL,       NULL,       1 << 3,       0,           -1 },
+    { "Emacs",    NULL,       NULL,       1 | ( 1 << 8 ), 0,           -1 },
     { "Spotify",  NULL,       NULL,       1 << 2,       0,           -1 },
 };
 
@@ -68,10 +69,11 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_orange, "-sf", col_gray4, NULL };
-static const char *rofidesk[] = { "rofi", "-show", "drun", NULL };
-static const char *roficmd[]  = { "rofi", "-show", "run",  NULL };
+static const char *rofidesk[]= { "rofi", "-show", "drun", NULL };
+static const char *roficmd[] = { "rofi", "-show", "run",  NULL };
 static const char *rofiwin[] = { "rofi", "-show", "window", NULL };
-static const char *termcmd[]  = { "st", "-e", "tmux", NULL };
+static const char *termcmd[] = { "st", "-e", "tmux", NULL };
+static const char *termcon[] = { "st", "-e", "tmux", "a", NULL };
 /* static const char *lockcmd[] = { "xsecurelock", NULL }; */
 static const char *lockcmd[] = { "loginctl", "lock-session", NULL };
 
@@ -82,6 +84,7 @@ static Key keys[] = {
     { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = roficmd } },
     { MODKEY,                       XK_w,      spawn,          {.v = rofiwin } },
     { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+    { MODKEY|ControlMask,           XK_Return, spawn,          {.v = termcon } },
     { MODKEY,                       XK_b,      togglebar,      {0} },
     { MODKEY|ShiftMask,             XK_j,      rotatestack,    {.i = +1 } },
     { MODKEY|ShiftMask,             XK_k,      rotatestack,    {.i = -1 } },
@@ -100,6 +103,7 @@ static Key keys[] = {
     { MODKEY,                       XK_space,  setlayout,      {0} },
     { MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
     { MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
+    { MODKEY,                       XK_w,      togglewin,      {0} },
     { MODKEY,                       XK_0,      view,           {.ui = ~0 } },
     { MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
     { MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
