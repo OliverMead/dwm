@@ -76,10 +76,16 @@ static const char *termcmd[] = { "st", "-e", "tmux", NULL };
 static const char *termcon[] = { "st", "-e", "tmux", "a", NULL };
 /* static const char *lockcmd[] = { "xsecurelock", NULL }; */
 static const char *lockcmd[] = { "loginctl", "lock-session", NULL };
+static const char *rotatecmd[] = { "screen_rotate.sh", NULL };
+static const char *volup[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@" "+1000", NULL };
+static const char *voldown[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-1000", NULL };
+static const char *mute[] = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL };
 
 static Key keys[] = {
     /* modifier                     key        function        argument */
     { 0,                            XF86XK_ScreenSaver, spawn, {.v = lockcmd } },
+    { 0,                            XF86XK_RotateWindows, spawn, {.v = rotatecmd } },
+    { 0,                            XF86XK_AudioRaiseVolume, spawn, {.v = volup } },
     { MODKEY,                       XK_p,      spawn,          {.v = rofidesk } },
     { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = roficmd } },
     { MODKEY,                       XK_w,      spawn,          {.v = rofiwin } },
