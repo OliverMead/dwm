@@ -77,17 +77,32 @@ static const char *termcon[] = { "st", "-e", "tmux", "a", NULL };
 /* static const char *lockcmd[] = { "xsecurelock", NULL }; */
 static const char *lockcmd[] = { "loginctl", "lock-session", NULL };
 static const char *rotatecmd[] = { "screen_rotation.sh", NULL };
+static const char *flipcmd[] = { "screen_flip.sh", NULL };
 static const char *volup[] = { "pamixer", "-i", "5", NULL };
 static const char *voldown[] = { "pamixer", "-d", "5", NULL };
 static const char *mute[] = { "pamixer", "-t", NULL };
+
+static const char *emacs[] = { "emacs", NULL };
+
+static const char *pausecmd[] = { "playerctl", "play-pause", NULL };
+static const char *next[] = { "playerctl", "next", NULL };
+static const char *prev[] = { "playerctl", "previous", NULL };
+static const char *stop[] = { "playerctl", "stop", NULL };
+
 
 static Key keys[] = {
     /* modifier                     key        function        argument */
     { 0,                            XF86XK_ScreenSaver, spawn, {.v = lockcmd } },
     { 0,                            XF86XK_RotateWindows, spawn, {.v = rotatecmd } },
+    { 0,                            XF86XK_TaskPane, spawn, {.v = flipcmd } },
     { 0,                            XF86XK_AudioRaiseVolume, spawn, {.v = volup } },
     { 0,                            XF86XK_AudioLowerVolume, spawn, {.v = voldown } },
     { 0,                            XF86XK_AudioMute,   spawn, {.v = mute } },
+    { 0,                            XF86XK_AudioPlay,   spawn, {.v = pausecmd } },
+    { 0,                            XF86XK_AudioNext,   spawn, {.v = next } },
+    { 0,                            XF86XK_AudioPrev,   spawn, {.v = prev } },
+    { 0,                            XF86XK_AudioStop,   spawn, {.v = stop } },
+    { 0,                            XF86XK_Launch1,     spawn, {.v = emacs } },
     { MODKEY,                       XK_p,      spawn,          {.v = rofidesk } },
     { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = roficmd } },
     { MODKEY,                       XK_w,      spawn,          {.v = rofiwin } },
@@ -140,7 +155,7 @@ static Button buttons[] = {
     { ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
     { ClkWinTitle,          0,              Button1,        togglewin,      {0} },
     { ClkWinTitle,          0,              Button2,        zoom,           {0} },
-    { ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+    /* { ClkStatusText,        0,              Button1,        togglebar,      {0} }, */
     { ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
     { ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
     { ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
