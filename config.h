@@ -5,8 +5,8 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 16;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Mononoki:size=18" };
-static const char dmenufont[]       = "Mononoki:size=18";
+static const char *fonts[]          = { "Mononoki:size=16" };
+static const char dmenufont[]       = "Mononoki:size=16";
 static const char col_gray1[]       = "#282828";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#928374";
@@ -22,7 +22,9 @@ static const char *colors[][3]      = {
 
 /* tagging */
 /* static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }; */
-static const char *tags[] = {"", "", "", "", "", "", "", "", ""};
+/* static const char *tags[] = {"", "", "", "", "", "", "", "", ""}; */
+/* static const char *tags[] = {"", "", "", "", "", "", "🤓", "", ""}; */
+static const char *tags[] = {"", "", "", "", "", "", "", "", ""};
 
 static const Rule rules[] = {
     /* xprop(1):
@@ -74,6 +76,7 @@ static const char *roficmd[] = { "rofi", "-show", "run",  NULL };
 static const char *rofiwin[] = { "rofi", "-show", "window", NULL };
 static const char *termcmd[] = { "st", "-e", "tmux", NULL };
 static const char *termcon[] = { "st", "-e", "tmux", "a", NULL };
+static const char *pcemacs[] = { "st", "-e", "ssh", "-tXYC", "home", "-p", "443", "tmux", "new", "-As", "emacs-connection", "emacsclient", "-c", NULL };
 /* static const char *lockcmd[] = { "xsecurelock", NULL }; */
 static const char *lockcmd[] = { "loginctl", "lock-session", NULL };
 static const char *rotatecmd[] = { "screen_rotation.sh", NULL };
@@ -81,14 +84,17 @@ static const char *flipcmd[] = { "screen_flip.sh", NULL };
 static const char *volup[] = { "pamixer", "-i", "5", NULL };
 static const char *voldown[] = { "pamixer", "-d", "5", NULL };
 static const char *mute[] = { "pamixer", "-t", NULL };
+static const char *micmute[] = { "pamixer", "--default-source", "-t", NULL };
 
-static const char *emacs[] = { "emacs", NULL };
+static const char *emacs[] = { "emacsclient", "-c", NULL };
+static const char *emacsrestart[] = { "emacs_restart.sh", NULL };
+static const char *emacsstart[] = { "emacs_start.sh", NULL };
+static const char *emacsstop[] = { "emacs_stop.sh", NULL };
 
 static const char *pausecmd[] = { "playerctl", "play-pause", NULL };
 static const char *next[] = { "playerctl", "next", NULL };
 static const char *prev[] = { "playerctl", "previous", NULL };
 static const char *stop[] = { "playerctl", "stop", NULL };
-
 
 static Key keys[] = {
     /* modifier                     key        function        argument */
@@ -98,10 +104,15 @@ static Key keys[] = {
     { 0,                            XF86XK_AudioRaiseVolume, spawn, {.v = volup } },
     { 0,                            XF86XK_AudioLowerVolume, spawn, {.v = voldown } },
     { 0,                            XF86XK_AudioMute,   spawn, {.v = mute } },
+    { 0,                            XF86XK_AudioMicMute, spawn, {.v = micmute } },
     { 0,                            XF86XK_AudioPlay,   spawn, {.v = pausecmd } },
     { 0,                            XF86XK_AudioNext,   spawn, {.v = next } },
     { 0,                            XF86XK_AudioPrev,   spawn, {.v = prev } },
     { 0,                            XF86XK_AudioStop,   spawn, {.v = stop } },
+    { MODKEY,                       XF86XK_Launch1,     spawn, {.v = emacsrestart } },
+    { MODKEY|ControlMask,           XF86XK_Launch1,     spawn, {.v = emacsstop } },
+    { MODKEY|ShiftMask,             XF86XK_Launch1,     spawn, {.v = emacsstart } },
+    { ShiftMask,                    XF86XK_Launch1,     spawn, {.v = pcemacs } },
     { 0,                            XF86XK_Launch1,     spawn, {.v = emacs } },
     { MODKEY,                       XK_p,      spawn,          {.v = rofidesk } },
     { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = roficmd } },

@@ -1,0 +1,67 @@
+commit ac31142d24599ef15717dd78161e99838d2a0787
+Author: Chris Down <chris@chrisdown.name>
+Date:   Mon Dec 5 15:17:30 2022 +0000
+
+    grabkeys: Grab all available keycodes for a keysym
+    
+    It's possible for one keysym to have multiple keycodes. For example, in
+    my case I have a keyboard with XF86AudioPlay, but I also have that
+    button on my headphones. When XF86AudioPlay is issued from the keyboard
+    it has X keycode 172, but when it comes from the headphones it has
+    keycode 208.
+    
+    You can see the relevant bindings with xmodmap, or similar:
+    
+        % xmodmap -pke | grep XF86AudioPlay
+        keycode 172 = XF86AudioPlay XF86AudioPause XF86AudioPlay XF86AudioPause
+        keycode 208 = XF86AudioPlay NoSymbol XF86AudioPlay
+        keycode 215 = XF86AudioPlay NoSymbol XF86AudioPlay
+    
+    This is a problem because the current code only binds a single one of
+    these keycodes, which means that events from other devices are lost. In
+    my case, binding XF86AudioPlay does the right thing and correctly
+    handles my keyboard's keys, but does nothing on my headphones.
+    
+    In order to fix this, we look at the keyboard mapping using
+    XGetKeyboardMapping and pick out all of the matching keycodes rather
+    than just the first one. The keypress() side of this just works, because
+    the keycode gets converted back to a canonical keysym before any action
+    is taken.
+
+diff --git dwm.c dwm.c
+index 253aba7..af75787 100644
+--- dwm.c
++++ dwm.c
+@@ -955,16 +955,24 @@ grabkeys(void)
+ {
+ 	updatenumlockmask();
+ 	{
+-		unsigned int i, j;
++		unsigned int i, j, k;
+ 		unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
+-		KeyCode code;
++		int start, end, skip;
++		KeySym *syms;
+ 
+ 		XUngrabKey(dpy, AnyKey, AnyModifier, root);
+-		for (i = 0; i < LENGTH(keys); i++)
+-			if ((code = XKeysymToKeycode(dpy, keys[i].keysym)))
+-				for (j = 0; j < LENGTH(modifiers); j++)
+-					XGrabKey(dpy, code, keys[i].mod | modifiers[j], root,
+-						True, GrabModeAsync, GrabModeAsync);
++		XDisplayKeycodes(dpy, &start, &end);
++		syms = XGetKeyboardMapping(dpy, start, end - start + 1, &skip);
++		for (k = start; k <= end; k++)
++			for (i = 0; i < LENGTH(keys); i++)
++				/* skip modifier codes, we do that ourselves */
++				if (keys[i].keysym == syms[(k - start) * skip])
++					for (j = 0; j < LENGTH(modifiers); j++)
++						XGrabKey(dpy, k,
++							 keys[i].mod | modifiers[j],
++							 root, True,
++							 GrabModeAsync, GrabModeAsync);
++		XFree(syms);
+ 	}
+ }
+ 
+
