@@ -34,10 +34,9 @@ static const Rule rules[] = {
     /* class      instance    title       tags mask     isfloating   monitor */
     { "gimp",     NULL,       NULL,       0,            1,           -1 },
     { "firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
-    { "discord",  NULL,       NULL,       1 << 7,       0,           -1 },
-    { "mpv",      NULL,       NULL,    ~( 1 | ( 1 << 7 ) ), 0,           -1 },
+    //    { "mpv",      NULL,       NULL,    ~( 1 | ( 1 << 7 ) ), 0,           -1 },
     /* { "St",       NULL,       NULL,       (1 << 8) - 1, 0,           -1 }, */
-    { "Steam",    NULL,       NULL,       1 << 3,       0,           -1 },
+    { "steam",    NULL,       NULL,       1 << 3,       0,           -1 },
     { "Emacs",    NULL,       NULL,       1 | ( 1 << 8 ), 0,           -1 },
     { "Spotify",  NULL,       NULL,       1 << 2,       0,           -1 },
 };
