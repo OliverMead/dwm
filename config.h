@@ -87,6 +87,7 @@ static const char *voldown[] = { "pamixer", "-d", "5", NULL };
 static const char *mute[] = { "pamixer", "-t", NULL };
 static const char *micmute[] = { "pamixer", "--default-source", "-t", NULL };
 
+static const char *autorandr[] = { "autorandr", "-c", NULL };
 static const char *emacs[] = { "emacsclient", "-c", NULL };
 static const char *emacsrestart[] = { "emacs_restart.sh", NULL };
 static const char *emacsstart[] = { "emacs_start.sh", NULL };
@@ -100,6 +101,7 @@ static const char *stop[] = { "playerctl", "stop", NULL };
 static Key keys[] = {
     /* modifier                     key        function        argument */
     { 0,                            XF86XK_ScreenSaver, spawn, {.v = lockcmd } },
+    { 0,                            XF86XK_Display,     spawn, {.v = autorandr } },
     { 0,                            XF86XK_RotateWindows, spawn, {.v = rotatecmd } },
     { 0,                            XF86XK_TaskPane, spawn, {.v = flipcmd } },
     { 0,                            XF86XK_AudioRaiseVolume, spawn, {.v = volup } },
